@@ -1,208 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Retirement Planner</title>
 
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
 
-    <link rel="manifest" href="manifest.json">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<title>Retirement Planner</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link rel="manifest" href="manifest.json">
+
+<meta name="theme-color" content="#0f172a">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 
 <body>
 
-<header class="topbar">
-    <h1>Retirement Planner</h1>
+<header>
 
-    <button id="themeButton">🌙</button>
+<h1>💰 Retirement Planner</h1>
+
+<p>Indian Investment & Retirement Calculator</p>
+
 </header>
 
-<nav class="menu">
+<nav>
 
-<button data-page="dashboard">Dashboard</button>
+<button class="active">Dashboard</button>
 
-<button data-page="retirement">Retirement</button>
+<button>Retirement</button>
 
-<button data-page="sip">SIP</button>
+<button>SIP</button>
 
-<button data-page="nps">NPS</button>
+<button>NPS</button>
 
-<button data-page="swp">SWP</button>
+<button>SWP</button>
 
-<button data-page="settings">Settings</button>
+<button>Settings</button>
 
 </nav>
 
-<main>
-
-<section id="dashboard" class="page active">
+<div class="container">
 
 <div class="card">
 
-<h2>Welcome</h2>
+<h2>Retirement Summary</h2>
 
-<p>
+<p>Required Corpus</p>
 
-Professional Retirement Planner for Indian Investors.
-
-</p>
+<h1 id="requiredCorpus">₹0</h1>
 
 </div>
+
+<div class="card">
+
+<h2>Projected Corpus</h2>
+
+<h1 id="projectedCorpus">₹0</h1>
+
+</div>
+
+<div class="card">
+
+<h2>Gap</h2>
+
+<h1 id="gap">₹0</h1>
+
+</div>
+
+<div class="card">
+
+<canvas id="portfolioChart"></canvas>
+
+</div>
+
+<div class="card">
+
+<h2>Quick Calculators</h2>
 
 <div class="grid">
 
-<div class="card">
+<button id="retirementBtn">
 
-<h3>Current Net Worth</h3>
-
-<h1 id="netWorth">₹0</h1>
-
-</div>
-
-<div class="card">
-
-<h3>Retirement Corpus</h3>
-
-<h1 id="retirementCorpus">₹0</h1>
-
-</div>
-
-<div class="card">
-
-<h3>Years Remaining</h3>
-
-<h1 id="yearsRemaining">0</h1>
-
-</div>
-
-<div class="card">
-
-<h3>Monthly Investment</h3>
-
-<h1 id="monthlyInvestment">₹0</h1>
-
-</div>
-
-</div>
-
-<canvas id="growthChart"></canvas>
-
-</section>
-
-<section id="retirement" class="page">
-
-<div class="card">
-
-<h2>Retirement Corpus Calculator</h2>
-
-<label>
-
-Current Monthly Expense
-
-<input id="expense" type="number" value="30000">
-
-</label>
-
-<label>
-
-Inflation %
-
-<input id="inflation" type="number" value="6">
-
-</label>
-
-<label>
-
-Years Until Retirement
-
-<input id="years" type="number" value="34">
-
-</label>
-
-<label>
-
-Return During Retirement %
-
-<input id="return" type="number" value="8">
-
-</label>
-
-<label>
-
-Retirement Duration
-
-<input id="duration" type="number" value="45">
-
-</label>
-
-<button id="calculateRetirement">
-
-Calculate
+Retirement
 
 </button>
 
-<h2 id="retirementResult">
+<button id="sipBtn">
 
-₹0
+SIP
 
-</h2>
+</button>
 
-</div>
+<button id="npsBtn">
 
-</section>
+NPS
 
-<section id="sip" class="page">
+</button>
 
-<div class="card">
+<button id="swpBtn">
 
-<h2>SIP Calculator</h2>
+SWP
 
-<p>Coming next...</p>
-
-</div>
-
-</section>
-
-<section id="nps" class="page">
-
-<div class="card">
-
-<h2>NPS Calculator</h2>
-
-<p>Coming next...</p>
+</button>
 
 </div>
 
-</section>
-
-<section id="swp" class="page">
-
-<div class="card">
-
-<h2>SWP Calculator</h2>
-
-<p>Coming next...</p>
+</div>
 
 </div>
 
-</section>
+<footer>
 
-<section id="settings" class="page">
+Version 0.1
 
-<div class="card">
-
-<h2>Settings</h2>
-
-<p>Dark Mode</p>
-
-</div>
-
-</section>
-
-</main>
+</footer>
 
 <script src="app.js"></script>
 
