@@ -266,3 +266,31 @@ body.dark header{
 background:#0b1220;
 
 }
+input{
+width:100%;
+padding:12px;
+margin:8px 0 18px;
+border-radius:10px;
+border:1px solid #ddd;
+font-size:16px;
+}
+
+label{
+font-weight:600;
+}
+
+button{
+width:100%;
+padding:14px;
+border:none;
+background:#2563eb;
+color:white;
+border-radius:12px;
+font-size:17px;
+cursor:pointer;
+margin-top:10px;
+}
+
+button:hover{
+opacity:.9;
+}
