@@ -231,3 +231,38 @@ padding:16px;
 }
 
 }
+body.dark{
+
+background:#0f172a;
+
+color:white;
+
+}
+
+body.dark .card{
+
+background:#1e293b;
+
+color:white;
+
+}
+
+body.dark nav{
+
+background:#111827;
+
+}
+
+body.dark nav button{
+
+background:#334155;
+
+color:white;
+
+}
+
+body.dark header{
+
+background:#0b1220;
+
+}
