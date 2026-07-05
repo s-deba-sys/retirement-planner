@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nivesh — Retirement Planner</title>
+<meta name="description" content="A retirement, SIP, step-up SIP and NPS planner built for Indian rupee financial goals.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="growth-ribbon" aria-hidden="true">
+  <svg viewBox="0 0 1200 200" preserveAspectRatio="none">
+    <path d="M0,180 C150,170 220,150 320,120 C420,90 480,140 580,110 C680,80 740,40 860,45 C960,50 1040,15 1200,10" />
+  </svg>
+</div>
+
+<header class="site-header">
+  <div class="brand">
+    <span class="brand-mark">नि</span>
+    <div class="brand-text">
+      <span class="brand-name">Nivesh</span>
+      <span class="brand-tag">Retirement &amp; Investment Planner</span>
+    </div>
+  </div>
+  <button id="themeButton" class="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+    <span class="theme-icon-light">☀</span>
+    <span class="theme-icon-dark">☾</span>
+  </button>
+</header>
+
+<nav class="tab-nav" aria-label="Calculators">
+  <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+  <button class="tab-btn" data-tab="retirement">Retirement</button>
+  <button class="tab-btn" data-tab="sip">SIP</button>
+  <button class="tab-btn" data-tab="stepup">Step-up SIP</button>
+  <button class="tab-btn" data-tab="nps">NPS</button>
+</nav>
+
+<main class="app-main">
+
+  <!-- ============================= DASHBOARD ============================= -->
+  <section class="tab-panel active" id="tab-dashboard">
+
+    <div class="panel-intro">
+      <h1>Your retirement, at a glance</h1>
+      <p>Set your basic numbers once — every calculator on this page reads from them.</p>
+    </div>
+
+    <form class="profile-grid card" id="profileForm">
+      <div class="field">
+        <label for="currentAge">Current age</label>
+        <input type="number" id="currentAge" value="31">
+      </div>
+      <div class="field">
+        <label for="retirementAge">Retirement age</label>
+        <input type="number" id="retirementAge" value="60">
+      </div>
+      <div class="field">
+        <label for="lifeExpectancy">Plan until age</label>
+        <input type="number" id="lifeExpectancy" value="85">
+      </div>
+      <div class="field">
+        <label for="monthlyExpense">Current monthly expense (₹)</label>
+        <input type="number" id="monthlyExpense" value="45000">
+      </div>
+      <div class="field">
+        <label for="inflation">Expected inflation (%)</label>
+        <input type="number" id="inflation" step="0.1" value="6">
+      </div>
+      <div class="field">
+        <label for="preReturn">Return before retirement (%)</label>
+        <input type="number" id="preReturn" step="0.1" value="11">
+      </div>
+      <div class="field">
+        <label for="postReturn">Return during retirement (%)</label>
+        <input type="number" id="postReturn" step="0.1" value="7">
+      </div>
+      <div class="field">
+        <label for="existingCorpus">Existing investments (₹)</label>
+        <input type="number" id="existingCorpus" value="734000">
+      </div>
+    </form>
+
+    <div class="stat-trio">
+      <div class="card stat-card">
+        <span class="stat-label">Required corpus</span>
+        <span class="stat-value" id="requiredCorpus">₹0</span>
+        <span class="stat-sub">to sustain your lifestyle through retirement</span>
+      </div>
+      <div class="card stat-card">
+        <span class="stat-label">Projected corpus</span>
+        <span class="stat-value" id="projectedCorpus">₹0</span>
+        <span class="stat-sub" id="projectedSub">existing investments, growing alone</span>
+      </div>
+      <div class="card stat-card" id="gapCard">
+        <span class="stat-label" id="gapLabel">Gap</span>
+        <span class="stat-value" id="gap">₹0</span>
+        <span class="stat-sub" id="gapSub">projected minus required</span>
+      </div>
+    </div>
+
+    <div class="card meter-card">
+      <div class="meter-heading">
+        <span>Required</span>
+        <span>Projected</span>
+      </div>
+      <div class="corpus-meter">
+        <div class="meter-track">
+          <div class="meter-fill" id="meterFill"></div>
+          <div class="meter-marker" id="meterMarker"></div>
+        </div>
+      </div>
+      <p class="meter-caption" id="meterCaption">Add SIP or NPS contributions to close the gap.</p>
+    </div>
+
+    <div class="card chart-card">
+      <h2>Corpus over time</h2>
+      <p class="chart-caption">Accumulation to retirement, then drawdown through your plan horizon.</p>
+      <canvas id="portfolioChart" height="110"></canvas>
+    </div>
+
+  </section>
+
+  <!-- ============================= RETIREMENT ============================= -->
+  <section class="tab-panel" id="tab-retirement">
+    <div class="panel-intro">
+      <h1>Retirement corpus calculator</h1>
+      <p>How much you need saved by the day you retire.</p>
+    </div>
+
+    <div class="calc-layout">
+      <form class="card form-card" id="retirementForm">
+        <div class="field">
+          <label for="rExpense">Current monthly expense (₹)</label>
+          <input type="number" id="rExpense" value="45000">
+        </div>
+        <div class="field">
+          <label for="rInflation">Expected inflation (%)</label>
+          <input type="number" id="rInflation" step="0.1" value="6">
+        </div>
+        <div class="field">
+          <label for="rYears">Years to retirement</label>
+          <input type="number" id="rYears" value="29">
+        </div>
+        <div class="field">
+          <label for="rReturn">Post-retirement return (%)</label>
+          <input type="number" id="rReturn" step="0.1" value="7">
+        </div>
+        <div class="field">
+          <label for="rDuration">Years in retirement</label>
+          <input type="number" id="rDuration" value="25">
+        </div>
+        <button type="submit" class="btn-primary">Calculate</button>
+      </form>
+
+      <div class="results-column">
+        <div class="card">
+          <h2>Monthly expense at retirement</h2>
+          <h1 id="rFutureExpense">₹0</h1>
+        </div>
+        <div class="card">
+          <h2>Annual expense at retirement</h2>
+          <h1 id="rAnnualExpense">₹0</h1>
+        </div>
+        <div class="card highlight">
+          <h2>Required retirement corpus</h2>
+          <h1 id="rResult">₹0</h1>
+        </div>
+      </div>
+    </div>
+
+    <div class="card table-card">
+      <h2>Year-by-year drawdown</h2>
+      <p class="chart-caption">Does the corpus above actually last through retirement?</p>
+      <div class="table-scroll">
+        <table id="rTable">
+          <thead>
+            <tr><th>Year</th><th>Opening balance</th><th>Growth</th><th>Withdrawal</th><th>Closing balance</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= SIP ============================= -->
+  <section class="tab-panel" id="tab-sip">
+    <div class="panel-intro">
+      <h1>SIP calculator</h1>
+      <p>Project a flat monthly investment forward, or find the SIP needed to hit a goal.</p>
+    </div>
+
+    <div class="calc-layout">
+      <form class="card form-card" id="sipForm">
+        <div class="field">
+          <label for="sipAmount">Monthly investment (₹)</label>
+          <input type="number" id="sipAmount" value="15000">
+        </div>
+        <div class="field">
+          <label for="sipReturn">Expected annual return (%)</label>
+          <input type="number" id="sipReturn" step="0.1" value="12">
+        </div>
+        <div class="field">
+          <label for="sipYears">Investment period (years)</label>
+          <input type="number" id="sipYears" value="29">
+        </div>
+        <div class="field">
+          <label for="sipGoal">Goal corpus, today's ₹ (optional)</label>
+          <input type="number" id="sipGoal" value="0">
+        </div>
+        <button type="submit" class="btn-primary">Calculate</button>
+      </form>
+
+      <div class="results-column">
+        <div class="card highlight">
+          <h2>Future value of your SIP</h2>
+          <h1 id="sipResult">₹0</h1>
+        </div>
+        <div class="card" id="sipGoalCard" style="display:none;">
+          <h2>Required monthly SIP for your goal</h2>
+          <h1 id="sipRequired">₹0</h1>
+          <p class="chart-caption" id="sipGoalNote"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= STEP-UP SIP ============================= -->
+  <section class="tab-panel" id="tab-stepup">
+    <div class="panel-intro">
+      <h1>Step-up SIP calculator</h1>
+      <p>Increase your monthly investment every year, in line with income growth.</p>
+    </div>
+
+    <div class="calc-layout">
+      <form class="card form-card" id="stepupForm">
+        <div class="field">
+          <label for="suExisting">Existing corpus (₹)</label>
+          <input type="number" id="suExisting" value="734000">
+        </div>
+        <div class="field">
+          <label for="suAmount">Starting monthly SIP (₹)</label>
+          <input type="number" id="suAmount" value="15000">
+        </div>
+        <div class="field">
+          <label for="suStepUp">Annual step-up (%)</label>
+          <input type="number" id="suStepUp" step="0.1" value="7">
+        </div>
+        <div class="field">
+          <label for="suReturn">Expected annual return (%)</label>
+          <input type="number" id="suReturn" step="0.1" value="12">
+        </div>
+        <div class="field">
+          <label for="suYears">Investment period (years)</label>
+          <input type="number" id="suYears" value="29">
+        </div>
+        <button type="submit" class="btn-primary">Calculate</button>
+      </form>
+
+      <div class="results-column">
+        <div class="card highlight">
+          <h2>Future value of step-up SIP</h2>
+          <h1 id="suResult">₹0</h1>
+        </div>
+        <div class="card">
+          <h2>Final monthly contribution</h2>
+          <h1 id="suFinalMonthly">₹0</h1>
+        </div>
+      </div>
+    </div>
+
+    <div class="card table-card">
+      <h2>Year-by-year growth</h2>
+      <div class="table-scroll">
+        <table id="suTable">
+          <thead>
+            <tr><th>Year</th><th>Monthly contribution</th><th>Yearly contribution</th><th>Closing corpus</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= NPS ============================= -->
+  <section class="tab-panel" id="tab-nps">
+    <div class="panel-intro">
+      <h1>NPS calculator</h1>
+      <p>Employee + employer contributions, growing with annual increments.</p>
+    </div>
+
+    <div class="calc-layout">
+      <form class="card form-card" id="npsForm">
+        <div class="field">
+          <label for="npsExisting">Existing NPS corpus (₹)</label>
+          <input type="number" id="npsExisting" value="734000">
+        </div>
+        <div class="field">
+          <label for="npsEmployee">Employee contribution / month (₹)</label>
+          <input type="number" id="npsEmployee" value="6000">
+        </div>
+        <div class="field">
+          <label for="npsEmployer">Employer contribution / month (₹)</label>
+          <input type="number" id="npsEmployer" value="6000">
+        </div>
+        <div class="field">
+          <label for="npsIncrement">Annual increment (%)</label>
+          <input type="number" id="npsIncrement" step="0.1" value="7">
+        </div>
+        <div class="field">
+          <label for="npsReturn">Expected annual return (%)</label>
+          <input type="number" id="npsReturn" step="0.1" value="10">
+        </div>
+        <div class="field">
+          <label for="npsYears">Years to retirement</label>
+          <input type="number" id="npsYears" value="29">
+        </div>
+        <div class="field">
+          <label for="npsAnnuity">Annuitization at exit (%)</label>
+          <input type="number" id="npsAnnuity" value="40">
+        </div>
+        <div class="field">
+          <label for="npsAnnuityRate">Annuity rate (%)</label>
+          <input type="number" id="npsAnnuityRate" step="0.1" value="6">
+        </div>
+        <button type="submit" class="btn-primary">Calculate</button>
+      </form>
+
+      <div class="results-column">
+        <div class="card highlight">
+          <h2>Total NPS corpus at retirement</h2>
+          <h1 id="npsResult">₹0</h1>
+        </div>
+        <div class="card">
+          <h2>Lump-sum withdrawal</h2>
+          <h1 id="npsLumpSum">₹0</h1>
+        </div>
+        <div class="card">
+          <h2>Estimated monthly pension</h2>
+          <h1 id="npsPension">₹0</h1>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p>Nivesh is a planning aid, not financial advice. Figures are projections based on the assumptions you enter.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="calculator.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
