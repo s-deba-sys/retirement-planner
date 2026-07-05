@@ -1,34 +1,21 @@
 document.getElementById("calculateBtn").addEventListener("click", calculate);
 
-function calculate(){
+const corpus = Finance.retirementCorpus(
+    expense,
+    inflation,
+    years,
+    returnRate,
+    duration
+);
 
-const expense=Number(document.getElementById("expense").value);
+const future = Finance.futureExpense(
+    expense,
+    inflation,
+    years
+);
 
-const inflation=Number(document.getElementById("inflation").value)/100;
-
-const years=Number(document.getElementById("years").value);
-
-const r=Number(document.getElementById("returnRate").value)/100;
-
-const duration=Number(document.getElementById("duration").value);
-
-const retirementMonthly=
-expense*Math.pow(1+inflation,years);
-
-const annualExpense=retirementMonthly*12;
-
-const corpus=
-annualExpense/(r-inflation)*
-(1-Math.pow((1+inflation)/(1+r),duration));
-
-document.getElementById("result").innerHTML=
-"Required Corpus<br><br><b>₹"+
-(corpus/10000000).toFixed(2)+
-" Crore</b>";
-
-drawChart(retirementMonthly);
-
-}
+document.getElementById("result").innerHTML =
+    Finance.formatIndian(corpus);
 
 function drawChart(firstExpense){
 
