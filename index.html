@@ -49,67 +49,34 @@
 
 <div class="card">
 
-<h2>Retirement Summary</h2>
+<h2>Retirement Corpus Calculator</h2>
 
-<p>Required Corpus</p>
+<label>Current Monthly Expense (₹)</label>
+<input id="expense" type="number" value="30000">
 
-<h1 id="requiredCorpus">₹0</h1>
+<label>Inflation (%)</label>
+<input id="inflation" type="number" value="6">
 
-</div>
+<label>Years Until Retirement</label>
+<input id="years" type="number" value="34">
 
-<div class="card">
+<label>Investment Return After Retirement (%)</label>
+<input id="returnRate" type="number" value="8">
 
-<h2>Projected Corpus</h2>
+<label>Retirement Duration (Years)</label>
+<input id="duration" type="number" value="45">
 
-<h1 id="projectedCorpus">₹0</h1>
+<button id="calculateBtn">
+Calculate Retirement Corpus
+</button>
 
-</div>
-
-<div class="card">
-
-<h2>Gap</h2>
-
-<h1 id="gap">₹0</h1>
+<h2 id="result">₹0</h2>
 
 </div>
 
 <div class="card">
 
 <canvas id="portfolioChart"></canvas>
-
-</div>
-
-<div class="card">
-
-<h2>Quick Calculators</h2>
-
-<div class="grid">
-
-<button id="retirementBtn">
-
-Retirement
-
-</button>
-
-<button id="sipBtn">
-
-SIP
-
-</button>
-
-<button id="npsBtn">
-
-NPS
-
-</button>
-
-<button id="swpBtn">
-
-SWP
-
-</button>
-
-</div>
 
 </div>
 
