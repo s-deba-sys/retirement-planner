@@ -1,121 +1,70 @@
-// Retirement Planner v0.1.0
+document.getElementById("calculateBtn").addEventListener("click", calculate);
 
-document.addEventListener("DOMContentLoaded", () => {
+function calculate(){
 
-    initializeTheme();
+const expense=Number(document.getElementById("expense").value);
 
-    initializeDashboard();
+const inflation=Number(document.getElementById("inflation").value)/100;
 
-    initializeButtons();
+const years=Number(document.getElementById("years").value);
 
-});
+const r=Number(document.getElementById("returnRate").value)/100;
 
-function initializeDashboard(){
+const duration=Number(document.getElementById("duration").value);
 
-    document.getElementById("requiredCorpus").textContent = "₹7.40 Cr";
+const retirementMonthly=
+expense*Math.pow(1+inflation,years);
 
-    document.getElementById("projectedCorpus").textContent = "₹9.30 Cr";
+const annualExpense=retirementMonthly*12;
 
-    document.getElementById("gap").textContent = "₹1.90 Cr Surplus";
+const corpus=
+annualExpense/(r-inflation)*
+(1-Math.pow((1+inflation)/(1+r),duration));
 
-    createChart();
+document.getElementById("result").innerHTML=
+"Required Corpus<br><br><b>₹"+
+(corpus/10000000).toFixed(2)+
+" Crore</b>";
 
-}
-
-function initializeButtons(){
-
-    const buttons=document.querySelectorAll("nav button");
-
-    buttons.forEach(button=>{
-
-        button.addEventListener("click",()=>{
-
-            buttons.forEach(b=>b.classList.remove("active"));
-
-            button.classList.add("active");
-
-            alert(button.innerText + " module will be implemented next.");
-
-        });
-
-    });
+drawChart(retirementMonthly);
 
 }
 
-function initializeTheme(){
+function drawChart(firstExpense){
 
-    const saved=localStorage.getItem("theme");
+const chart=document.getElementById("portfolioChart");
 
-    if(saved==="dark"){
+if(window.chart){
 
-        document.body.classList.add("dark");
-
-    }
+window.chart.destroy();
 
 }
 
-const themeButton=document.getElementById("themeButton");
+let labels=[];
 
-if(themeButton){
+let values=[];
 
-themeButton.addEventListener("click",()=>{
+for(let i=0;i<=45;i++){
 
-document.body.classList.toggle("dark");
+labels.push(i);
 
-if(document.body.classList.contains("dark"))
-
-localStorage.setItem("theme","dark");
-
-else
-
-localStorage.setItem("theme","light");
-
-});
+values.push((firstExpense*Math.pow(1.06,i))/100000);
 
 }
 
-function createChart(){
-
-const ctx=document.getElementById("portfolioChart");
-
-if(!ctx) return;
-
-new Chart(ctx,{
-
+window.chart=new Chart(chart,{
 type:"line",
-
 data:{
-
-labels:["2026","2030","2035","2040","2045","2050","2055","2060"],
-
+labels:labels,
 datasets:[{
-
-label:"Projected Corpus (₹ Crore)",
-
-data:[0.07,0.25,0.75,1.8,3.2,5.1,7.1,9.3],
-
-borderWidth:3,
-
+label:"Monthly Expense (₹ Lakh)",
+data:values,
 fill:true,
-
-tension:.35
-
+tension:.3
 }]
-
-},
-
-options:{
-
-responsive:true,
-
-plugins:{
-
-legend:{display:true}
-
 }
-
-}
-
 });
 
 }
+
+calculate();
